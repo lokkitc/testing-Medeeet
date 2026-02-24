@@ -5,6 +5,50 @@
 {% endblock %}
 
 {% block content %}
+{% if not category and not query %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="jumbotron bg-primary text-white p-5 rounded">
+            <h1 class="display-4">Welcome to E-Learning Platform!</h1>
+            <p class="lead">Shop for products and enhance your learning experience with our educational apps.</p>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card bg-light text-dark">
+                        <div class="card-body text-center">
+                            <i class="fas fa-question-circle fa-3x mb-3 text-primary"></i>
+                            <h5>Quiz System</h5>
+                            <p>Test your knowledge with interactive quizzes</p>
+                            <a href="{% url 'quiz:quiz_list' %}" class="btn btn-primary">Start Quiz</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light text-dark">
+                        <div class="card-body text-center">
+                            <i class="fas fa-comments fa-3x mb-3 text-success"></i>
+                            <h5>Forum</h5>
+                            <p>Join discussions and share ideas with others</p>
+                            <a href="{% url 'forum:forum_home' %}" class="btn btn-success">Visit Forum</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light text-dark">
+                        <div class="card-body text-center">
+                            <i class="fas fa-tasks fa-3x mb-3 text-warning"></i>
+                            <h5>Assignments</h5>
+                            <p>Submit and track your homework assignments</p>
+                            <a href="{% url 'assignments:assignment_list' %}" class="btn btn-warning">View Assignments</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="row">
     <div class="col-md-3">
         <div class="card">

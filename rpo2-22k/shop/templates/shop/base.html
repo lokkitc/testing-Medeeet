@@ -19,6 +19,22 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'shop:product_list' %}">Products</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-graduation-cap"></i> Learning Apps
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'quiz:quiz_list' %}">
+                                <i class="fas fa-question-circle"></i> Quiz
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'forum:forum_home' %}">
+                                <i class="fas fa-comments"></i> Forum
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'assignments:assignment_list' %}">
+                                <i class="fas fa-tasks"></i> Assignments
+                            </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <form class="d-flex me-3" method="get" action="{% url 'shop:product_list' %}">
                     <input class="form-control me-2" type="search" name="q" placeholder="Search products..." value="{{ query }}">

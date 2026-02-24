@@ -1,6 +1,4 @@
 from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Field
 from .models import Order
 
 
@@ -16,16 +14,6 @@ class CartAddProductForm(forms.Form):
         initial=False,
         widget=forms.HiddenInput
     )
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.layout = Layout(
-            Field('quantity'),
-            Field('override'),
-            Submit('submit', 'Add to Cart', css_class='btn btn-primary')
-        )
 
 
 class OrderCreateForm(forms.ModelForm):
@@ -40,17 +28,3 @@ class OrderCreateForm(forms.ModelForm):
             'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
             'city': forms.TextInput(attrs={'class': 'form-control'}),
         }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.layout = Layout(
-            Field('first_name'),
-            Field('last_name'),
-            Field('email'),
-            Field('address'),
-            Field('postal_code'),
-            Field('city'),
-            Submit('submit', 'Place Order', css_class='btn btn-success btn-lg')
-        )
