@@ -1,0 +1,113 @@
+{% extends "forum/base.html" %}
+
+{% block forum_title %}Forum Home{% endblock %}
+
+{% block forum_content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fas fa-comments"></i> Forum</h1>
+            {% if user.is_authenticated %}
+                <a href="{% url 'forum:create_post' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Post
+                </a>
+            {% endif %}
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3>Categories</h3>
+                {% if categories %}
+                    <div class="row">
+                        {% for category in categories %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-folder"></i> {{ category.name }}
+                                        </h5>
+                                        <p class="card-text">{{ category.description|truncatewords:15 }}</p>
+                                        <a href="{% url 'forum:category_posts' category.id %}" class="btn btn-outline-primary btn-sm">
+                                            View Posts
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        No categories available yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <h3>Recent Posts</h3>
+                {% if recent_posts %}
+                    <div class="list-group">
+                        {% for post in recent_posts %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">
+                                        {% if post.is_pinned %}
+                                            <i class="fas fa-thumbtack text-warning"></i>
+                                        {% endif %}
+                                        <a href="{% url 'forum:post_detail' post.id %}" class="text-decoration-none">
+                                            {{ post.title }}
+                                        </a>
+                                    </h5>
+                                    <small>{{ post.created_at|date:"M d, Y H:i" }}</small>
+                                </div>
+                                <p class="mb-1">{{ post.content|truncatewords:20 }}</p>
+                                <small>
+                                    <i class="fas fa-user"></i> {{ post.author.username }} 
+                                    <span class="ms-3"><i class="fas fa-eye"></i> {{ post.views }} views</span>
+                                    <span class="ms-3"><i class="fas fa-comment"></i> {{ post.comments.count }} comments</span>
+                                    <span class="ms-3"><i class="fas fa-tag"></i> {{ post.category.name }}</span>
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        No posts yet. 
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'forum:create_post' %}">Create the first post!</a>
+                        {% else %}
+                            <a href="{% url 'login' %}">Log in</a> to create a post.
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Forum Info</h5>
+            </div>
+            <div class="card-body">
+                <p>Welcome to our community forum! Share ideas, ask questions, and connect with others.</p>
+                
+                {% if not user.is_authenticated %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Please <a href="{% url 'login' %}">log in</a> to participate in discussions.
+                    </div>
+                {% endif %}
+                
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'forum:create_post' %}"><i class="fas fa-plus"></i> Create Post</a></li>
+                    <li><a href="{% url 'quiz:quiz_list' %}"><i class="fas fa-question-circle"></i> Take Quiz</a></li>
+                    <li><a href="{% url 'assignments:assignment_list' %}"><i class="fas fa-tasks"></i> View Assignments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

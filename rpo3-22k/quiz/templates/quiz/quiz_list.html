@@ -1,0 +1,44 @@
+{% extends "quiz/base.html" %}
+
+{% block quiz_title %}Available Quizzes{% endblock %}
+
+{% block quiz_content %}
+<div class="row">
+    <div class="col-12">
+        <h1><i class="fas fa-question-circle"></i> Available Quizzes</h1>
+        <p class="lead">Test your knowledge with our interactive quizzes!</p>
+        
+        {% if quizzes %}
+            <div class="row">
+                {% for quiz in quizzes %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ quiz.title }}</h5>
+                                <p class="card-text">{{ quiz.description|truncatewords:20 }}</p>
+                                <div class="text-muted small">
+                                    <i class="fas fa-clock"></i> 
+                                    {% if quiz.time_limit %}
+                                        {{ quiz.time_limit }} minutes
+                                    {% else %}
+                                        No time limit
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{% url 'quiz:quiz_detail' quiz.id %}" class="btn btn-primary">
+                                    <i class="fas fa-play"></i> Start Quiz
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No quizzes available at the moment. Check back later!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

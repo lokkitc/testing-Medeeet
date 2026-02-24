@@ -146,11 +146,9 @@ class ShopTests(TestCase):
         cart = Cart.objects.create(user=self.user)
         CartItem.objects.create(cart=cart, product=self.product, quantity=2, price=self.product.price)
         
-        # Используем URL напрямую вместо reverse
         url = '/checkout/'
         response = self.client.get(url)
         
-        # Проверяем что страница доступна или возвращает корректный статус
         success = response.status_code in [200, 404, 302]
         detail = "Страница оформления обработана" if success else "Ошибка обработки"
         
@@ -171,11 +169,9 @@ class ShopTests(TestCase):
             city='Test City'
         )
         
-        # Используем URL напрямую вместо reverse
         url = '/orders/'
         response = self.client.get(url)
         
-        # Проверяем что запрос обработан
         success = response.status_code in [200, 404, 302]
         detail = "Запрос истории обработан" if success else "Ошибка обработки"
         
@@ -208,7 +204,6 @@ class ShopTests(TestCase):
         headers = ['Результат', 'Метод', 'URL', 'Статус', 'Ожидался', 'Описание']
         markdown_table = tabulate(cls.results, headers=headers, tablefmt='github')
         
-        # Test cases table
         tc_headers = ['ID', 'Steps', 'Expected', 'Actual', 'Status']
         tc_table = tabulate(cls.test_cases, headers=tc_headers, tablefmt='github')
         

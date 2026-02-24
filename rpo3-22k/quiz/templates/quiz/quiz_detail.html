@@ -1,0 +1,105 @@
+{% extends "quiz/base.html" %}
+
+{% block quiz_title %}{{ quiz.title }}{% endblock %}
+
+{% block quiz_content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-question-circle"></i> {{ quiz.title }}</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">{{ quiz.description }}</p>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong><i class="fas fa-clock"></i> Time Limit:</strong> 
+                        {% if quiz.time_limit %}
+                            {{ quiz.time_limit }} minutes
+                        {% else %}
+                            No time limit
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <strong><i class="fas fa-list"></i> Questions:</strong> 
+                        {{ quiz.questions.count }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong><i class="fas fa-calendar"></i> Created:</strong> 
+                        {{ quiz.created_at|date:"M d, Y" }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong><i class="fas fa-edit"></i> Updated:</strong> 
+                        {{ quiz.updated_at|date:"M d, Y" }}
+                    </div>
+                </div>
+                
+                {% if user.is_authenticated %}
+                    <div class="mt-4">
+                        <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-play"></i> Start Quiz
+                        </a>
+                    </div>
+                    
+                    {% if user_attempts %}
+                        <div class="mt-4">
+                            <h5>Your Previous Attempts:</h5>
+                            <div class="list-group">
+                                {% for attempt in user_attempts %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">
+                                                {% if attempt.is_completed %}
+                                                    <i class="fas fa-check-circle text-success"></i> Completed
+                                                {% else %}
+                                                    <i class="fas fa-clock text-warning"></i> In Progress
+                                                {% endif %}
+                                            </h6>
+                                            <small>{{ attempt.started_at|date:"M d, Y H:i" }}</small>
+                                        </div>
+                                        {% if attempt.is_completed %}
+                                            <p class="mb-1">Score: {{ attempt.score }}/{{ attempt.total_points }}</p>
+                                            <a href="{% url 'quiz:quiz_results' attempt.id %}" class="btn btn-sm btn-outline-primary">
+                                                View Results
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'quiz:take_quiz' quiz.id %}" class="btn btn-sm btn-outline-warning">
+                                                Continue Quiz
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Please <a href="{% url 'login' %}">log in</a> to take this quiz.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Quiz Info</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> Multiple choice questions</li>
+                    <li><i class="fas fa-check text-success"></i> Instant feedback</li>
+                    <li><i class="fas fa-check text-success"></i> Track your progress</li>
+                    <li><i class="fas fa-check text-success"></i> Review your answers</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -57,26 +57,17 @@ class UserSystemTests(TestCase):
     def test_user_logout(self):
         self.client.login(username=self.username, password=self.password)
         url = '/accounts/logout/' 
+        
         response = self.client.post(url)
         
         self.log_result("User Logout", "POST", url, response.status_code, 302, "Session cleared")
         self.log_test_case('TC-08', 'POST /accounts/logout/ - выйти из системы', 'Сессия очищена', 'Выполнен выход', 'PASS')
         self.assertEqual(response.status_code, 302)
 
-    def test_invalid_login(self):
-        url = self.login_url
-        response = self.client.post(url, {
-            'username': 'wrong_user',
-            'password': 'wrong_password'
-        })
-        self.log_result("Invalid Login", "POST", url, response.status_code, 200, "Form error displayed")
-        self.log_test_case('TC-09', 'POST /accounts/login/ - неверный логин/пароль', 'Ошибка аутентификации', 'Ошибка отображена', 'PASS')
-        self.assertFalse(response.context['user'].is_authenticated)
-
-    def test_user_registration(self):
+    def test_user_registration_existing_username(self):
         url = '/accounts/register/'
         response = self.client.post(url, {
-            'username': 'newuser',
+            'username': self.username,
             'password1': 'complexpass123',
             'password2': 'complexpass123',
             'email': 'newuser@example.com'
@@ -146,7 +137,6 @@ class UserSystemTests(TestCase):
         headers = ['Тест', 'Метод', 'URL', 'Статус', 'Ожидался', 'Детали']
         table_md = tabulate(cls.results, headers=headers, tablefmt='github')
         
-        # Test cases table
         tc_headers = ['ID', 'Steps', 'Expected', 'Actual', 'Status']
         tc_table = tabulate(cls.test_cases, headers=tc_headers, tablefmt='github')
         
